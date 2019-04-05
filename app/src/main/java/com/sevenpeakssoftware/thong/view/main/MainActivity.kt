@@ -6,8 +6,13 @@ import com.sevenpeakssoftware.thong.BR
 import com.sevenpeakssoftware.thong.R
 import com.sevenpeakssoftware.thong.databinding.ActivityMainBinding
 import com.sevenpeakssoftware.thong.view.base.BaseActivity
+import retrofit2.Retrofit
+import javax.inject.Inject
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
+
+//    @Inject
+//    private lateinit var _service : Retrofit
 
     override fun getViewModel(): MainViewModel {
         return MainViewModel()
