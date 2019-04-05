@@ -1,6 +1,6 @@
 package com.sevenpeakssoftware.thong.config.database
 
-import com.sevenpeakssoftware.thong.config.model.Car
+import com.sevenpeakssoftware.thong.config.model.Artical
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,7 +13,7 @@ class DatabaseHelper : IDatabaseHelper {
     @Inject
     constructor(db: Database) { this.mDb = db }
 
-    override fun getAllCar(): Observable<List<Car>> {
+    override fun getAllArtical(): Observable<List<Artical>> {
         return Observable.create { emitter ->
             emitter.onNext(mDb!!.tableCar().loadAll())
         }

@@ -4,12 +4,12 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.sevenpeakssoftware.thong.config.model.Car
+import com.sevenpeakssoftware.thong.config.model.Artical
 
 import kotlin.collections.List
 
 @Dao
 interface CarTable {
-    @Query("SELECT * FROM tblCar")
-    fun loadAll(): List<Car>;
+    @Query("SELECT * FROM tblArtical")
+    fun loadAll(): List<Artical>;
 }

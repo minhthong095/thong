@@ -5,7 +5,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 interface IMainService {
-    fun getAllCar()
+    fun getAllArtical()
 }
 
 @Singleton
@@ -14,7 +14,7 @@ class MainService : IMainService {
 //    @Inject
 //    var _service : Retrofit?
 
-    override fun getAllCar() {
+    override fun getAllArtical() {
 
     }
 }
