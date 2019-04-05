@@ -4,11 +4,19 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import com.sevenpeakssoftware.thong.config.database.Database
+import com.sevenpeakssoftware.thong.config.database.DatabaseHelper
 import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatActivity() {
 
-    private var _viewBinding: T? = null
+//    @Inject
+//    lateinit var mDb: Database
+//
+//    private val mDbHelper = DatabaseHelper(mDb)
+
+    private lateinit var mViewBinding: T
 
     abstract fun getViewModel(): V
 
@@ -23,8 +31,8 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
     }
 
     private fun _runViewBinding() {
-        _viewBinding = DataBindingUtil.setContentView(this, getLayoutId())
-        _viewBinding!!.setVariable(getBindingVariable(), getViewModel())
-        _viewBinding!!.executePendingBindings()
+        mViewBinding = DataBindingUtil.setContentView(this, getLayoutId())
+        mViewBinding.setVariable(getBindingVariable(), getViewModel())
+        mViewBinding.executePendingBindings()
     }
 }

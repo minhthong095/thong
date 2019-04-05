@@ -6,16 +6,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DatabaseHelper : IDatabaseHelper {
-
-    private var mDb: Database? = null
-
-    @Inject
-    constructor(db: Database) { this.mDb = db }
+class DatabaseHelper(val mDb: Database) : IDatabaseHelper {
 
     override fun getAllArtical(): Observable<List<Artical>> {
         return Observable.create { emitter ->
-            emitter.onNext(mDb!!.tableArtical().loadAll())
+            emitter.onNext(mDb.tableArtical().loadAll())
         }
     }
 

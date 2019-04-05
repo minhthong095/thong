@@ -28,7 +28,7 @@ class Module {
 
     @Provides
     @Singleton
-    fun provideService() =
+    fun provideService(): Retrofit =
         Retrofit.Builder()
             .baseUrl(Constant.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())

@@ -1,21 +1,11 @@
 package com.sevenpeakssoftware.thong.view.main
 
-import com.sevenpeakssoftware.thong.config.model.ArticalResponse
+import com.sevenpeakssoftware.thong.config.EndPoint
+import com.sevenpeakssoftware.thong.config.model.ListArticalResponse
 import io.reactivex.Observable
-import retrofit2.Retrofit
-import javax.inject.Inject
-import javax.inject.Singleton
+import retrofit2.http.GET
 
 interface IMainService {
-//    fun getAllArtical() : Observable<List<ArticalResponse>>
-}
-
-@Singleton
-class MainService : IMainService {
-
-//    @Inject
-//    private lateinit var _service : Retrofit
-
-//    override fun getAllArtical() =
-//        _service.create(IMainService::class.java).getAllArtical()
+    @GET(EndPoint.GET_ARTICAL)
+    fun getAllArtical() : Observable<ListArticalResponse>
 }
