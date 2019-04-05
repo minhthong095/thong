@@ -16,7 +16,6 @@ data class ArticalResponse(
     @SerializedName("ingress")
     var ingress: String? = null,
 
-
     @SerializedName("image")
     var image: String? = null,
 

@@ -15,7 +15,7 @@ class DatabaseHelper : IDatabaseHelper {
 
     override fun getAllArtical(): Observable<List<Artical>> {
         return Observable.create { emitter ->
-            emitter.onNext(mDb!!.tableCar().loadAll())
+            emitter.onNext(mDb!!.tableArtical().loadAll())
         }
     }
 

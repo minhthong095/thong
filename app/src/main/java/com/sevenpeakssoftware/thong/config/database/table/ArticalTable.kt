@@ -9,7 +9,7 @@ import com.sevenpeakssoftware.thong.config.model.Artical
 import kotlin.collections.List
 
 @Dao
-interface CarTable {
+interface ArticalTable {
     @Query("SELECT * FROM tblArtical")
     fun loadAll(): List<Artical>;
 }
