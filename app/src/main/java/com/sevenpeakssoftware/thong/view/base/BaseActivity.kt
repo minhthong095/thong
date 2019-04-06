@@ -30,6 +30,8 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
         _runViewBinding()
     }
 
+    fun getBinding() = mViewBinding
+
     private fun _runViewBinding() {
         mViewBinding = DataBindingUtil.setContentView(this, getLayoutId())
         mViewBinding.setVariable(getBindingVariable(), getViewModel())

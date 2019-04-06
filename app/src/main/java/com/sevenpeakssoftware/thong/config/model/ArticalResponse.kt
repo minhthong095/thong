@@ -8,7 +8,7 @@ data class ArticalResponse(
     var id: Long? = null,
 
     @SerializedName("title")
-    var title: String? = null,
+    var title: String = "",
 
     @SerializedName("dateTime")
     var dateTime: String? = null,
