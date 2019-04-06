@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/tools">
 
     <data>
         <import type="android.view.View" />
@@ -7,21 +8,22 @@
                   type="com.sevenpeakssoftware.thong.view.main.item.ArticalCellViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-        <TextView
-                android:id="@+id/txtTitle"
+        <ImageView
+                android:contentDescription="@string/app_name"
+                android:id="@+id/imv"
+                bind:url="@{itemViewModel.bindImage}"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FF0"
-                android:text="@{itemViewModel.bindTitle}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-        />
+                android:adjustViewBounds="true"
+                android:layout_height="match_parent"/>
 
-    </LinearLayout>
+        <!--<TextView-->
+                <!--bind:textCaplocks="@{itemViewModel.bindTitle}"-->
+                <!--android:layout_width="wrap_content" android:layout_height="wrap_content"/>-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

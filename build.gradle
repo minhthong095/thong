@@ -40,4 +40,5 @@ ext {
     roomVersion = "2.0.0"
     runnerVersion = "1.1.2-alpha02"
     espressoVersion = "espresso-core:3.2.0-alpha02"
+    glideVersion = "4.9.0"
 }
