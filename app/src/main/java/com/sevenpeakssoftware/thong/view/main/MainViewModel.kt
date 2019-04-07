@@ -53,5 +53,5 @@ class MainAdapter : BaseRecycleViewAdapter<ItemArticalBinding, ArticalCellViewMo
 
     override fun getLayoutId(viewType: Int) = R.layout.item_artical
 
-    override fun getRatioHeight() = 0.6f
+//    override fun getRatioHeight() = 0.6f
 }

@@ -16,10 +16,17 @@ object BindingAdapter {
         adapter?.let { view.adapter = adapter }
 
     @JvmStatic
-    @BindingAdapter("bind:url")
+    @BindingAdapter("bind:urlArtical")
     fun bindUrl(imageView: ImageView, url: String) {
-        Glide.with(imageView.context)
+        val context = imageView.context
+
+        val density = context.resources.displayMetrics.density
+        val height = context.getSize().y / density
+        val width = context.getSize().x / density
+
+        Glide.with(context)
             .load(url)
+            .override(context.getSize().x,context.getSize().y / 2)
             .placeholder(R.drawable.default_thumb)
             .error(R.drawable.default_thumb)
             .into(imageView)

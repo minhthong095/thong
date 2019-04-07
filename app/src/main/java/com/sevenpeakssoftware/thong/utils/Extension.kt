@@ -1,5 +1,8 @@
 package com.sevenpeakssoftware.thong.utils
 
+import android.content.Context
+import android.graphics.Point
+import android.view.WindowManager
 import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.util.*
@@ -16,4 +19,11 @@ fun String.toOtherTimeFormat(
     val sdfTo = SimpleDateFormat(toFormat)
     sdfTo.timeZone = TimeZone.getTimeZone(toTimeZone)
     return sdfTo.format(d)
+}
+
+fun Context.getSize(): Point {
+    val windowManager = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val size = Point()
+    windowManager.defaultDisplay.getSize(size)
+    return size
 }

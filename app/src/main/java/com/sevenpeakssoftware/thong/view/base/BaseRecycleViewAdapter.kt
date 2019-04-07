@@ -13,6 +13,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.sevenpeakssoftware.thong.BR
+import com.sevenpeakssoftware.thong.utils.getSize
 import java.lang.ref.WeakReference
 
 
@@ -31,12 +32,7 @@ abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
         itemSource.addOnListChangedCallback(ListChangedCallBack<CB, CVM>(this as BaseRecycleViewAdapter<ViewDataBinding, ViewModel>))
     }
 
-    private fun _calHeightCell(): Int {
-        val windowManager = getContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val size = Point()
-        windowManager.defaultDisplay.getSize(size)
-        return (getRatioHeight() * size.y).toInt()
-    }
+    private fun _calHeightCell() = (getRatioHeight() * getContext().getSize().y).toInt()
 
     fun getContext() = mContext
 
@@ -46,7 +42,7 @@ abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
 
     open fun getItemType(position: Int) = 0
 
-    open fun getRatioHeight(): Float = 1f
+    open fun getRatioHeight(): Float = 0f
 
     open fun getCell(binder: ViewDataBinding) = RecycleViewCell<CVM>(binder)
 
@@ -65,6 +61,7 @@ abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
             false
         )
 
+        if (getRatioHeight() > 0)
         mBinding.apply { root.layoutParams.height = _calHeightCell() }
 
         return getCell(mBinding)
