@@ -4,12 +4,14 @@ import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.sevenpeakssoftware.thong.config.Constant
+import com.sevenpeakssoftware.thong.config.ViewModelProviderFactory
 import com.sevenpeakssoftware.thong.config.database.Database
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
@@ -27,12 +29,10 @@ class Module {
             .build()
 
     @Provides
-    @Singleton
     fun provideService(): Retrofit =
         Retrofit.Builder()
             .baseUrl(Constant.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-
 }

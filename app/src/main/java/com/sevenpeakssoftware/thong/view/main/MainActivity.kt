@@ -1,28 +1,26 @@
 package com.sevenpeakssoftware.thong.view.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.sevenpeakssoftware.thong.BR
 import com.sevenpeakssoftware.thong.R
-import com.sevenpeakssoftware.thong.config.database.Database
+import com.sevenpeakssoftware.thong.config.ViewModelProviderFactory
 import com.sevenpeakssoftware.thong.databinding.ActivityMainBinding
 import com.sevenpeakssoftware.thong.view.base.BaseActivity
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Retrofit
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     @Inject
-    lateinit var retrofit: Retrofit
+    lateinit var mFactory: ViewModelProviderFactory
 
     private lateinit var mViewModel : MainViewModel
 
     override fun getViewModel(): MainViewModel {
-        mViewModel = MainViewModel(retrofit.create(IMainService::class.java))
+        mViewModel = ViewModelProviders.of(this, mFactory).get(MainViewModel::class.java)
         return mViewModel
     }
 
@@ -38,6 +36,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         super.onCreate(savedInstanceState)
         initRecyclerView()
         fetchArticals()
+
     }
 
     fun initRecyclerView() {

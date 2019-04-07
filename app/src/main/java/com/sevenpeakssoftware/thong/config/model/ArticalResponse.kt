@@ -8,10 +8,16 @@ data class ArticalResponse(
     var id: Long? = null,
 
     @SerializedName("title")
-    var title: String = "",
+    var title: String? = null,
 
     @SerializedName("dateTime")
     var dateTime: String? = null,
+
+    @SerializedName("tags")
+    var tags: Array<String>? = null,
+
+    @SerializedName("content")
+    var content: Array<ContentResponse>? = null,
 
     @SerializedName("ingress")
     var ingress: String? = null,
@@ -24,4 +30,15 @@ data class ArticalResponse(
 
     @SerializedName("changed")
     var changed: String? = null
+)
+
+data class ContentResponse (
+    @SerializedName("type")
+    var type: String? = null,
+
+    @SerializedName("subject")
+    var subject: String? = null,
+
+    @SerializedName("description")
+    var description: String? = null
 )

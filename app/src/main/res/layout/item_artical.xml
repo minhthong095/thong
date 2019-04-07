@@ -37,7 +37,7 @@
             <TextView
                     android:textStyle="bold"
                     android:textColor="#FFF"
-                    android:text="Q7 - Greatness starts, when you don't stop."
+                    android:text="@{itemViewModel.bindTitle}"
                     android:textSize="28sp"
                     android:layout_marginStart="16dp"
                     app:layout_constraintBottom_toBottomOf="@id/viewImage"
@@ -48,7 +48,7 @@
 
         <TextView
                 android:id="@+id/txtTime"
-                android:text="29 November 2017 15:13"
+                android:text="@{itemViewModel.bindTime}"
                 android:textSize="16sp"
                 android:textColor="#a1a1a1"
                 android:layout_marginStart="16dp"
@@ -59,7 +59,7 @@
 
         <TextView
                 android:textSize="16sp"
-                android:text="The Audi Q7 is the result of an ambitious idea: never cease to improve."
+                android:text="@{itemViewModel.bindIngress}"
                 android:textColor="#FFF"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"

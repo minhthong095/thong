@@ -37,8 +37,8 @@ class MainViewModel(val mMainService: IMainService) : BaseViewModel() {
                 .subscribe({ response ->
                     println("XXXX")
                     bindAdapter.itemSource.addAll(
-                        response.content!!.map { articalResponse ->
-                            ArticalCellViewModel(articalResponse.title, articalResponse.image!!)
+                        response.content!!.map {
+                            ArticalCellViewModel(it)
                         }
                     )
                 }, { throwable ->
