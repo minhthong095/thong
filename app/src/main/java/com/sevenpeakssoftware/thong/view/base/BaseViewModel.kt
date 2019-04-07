@@ -13,5 +13,7 @@ abstract class BaseViewModel : ViewModel() {
         super.onCleared()
     }
 
+    open fun react() {}
+
     fun getDisposable() = _disposable
 }

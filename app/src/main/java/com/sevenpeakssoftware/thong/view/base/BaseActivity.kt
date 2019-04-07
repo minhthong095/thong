@@ -11,11 +11,6 @@ import javax.inject.Inject
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatActivity() {
 
-//    @Inject
-//    lateinit var mDb: Database
-//
-//    private val mDbHelper = DatabaseHelper(mDb)
-
     private lateinit var mViewBinding: T
 
     abstract fun getViewModel(): V
@@ -28,6 +23,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         _runViewBinding()
+        getViewModel().react()
     }
 
     fun getBinding() = mViewBinding

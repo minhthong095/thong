@@ -6,16 +6,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sevenpeakssoftware.thong.BR
 import com.sevenpeakssoftware.thong.R
 import com.sevenpeakssoftware.thong.config.ViewModelProviderFactory
+import com.sevenpeakssoftware.thong.config.database.DatabaseHelper
 import com.sevenpeakssoftware.thong.databinding.ActivityMainBinding
 import com.sevenpeakssoftware.thong.view.base.BaseActivity
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
-    @Inject
-    lateinit var mFactory: ViewModelProviderFactory
+    @Inject lateinit var mFactory: ViewModelProviderFactory
+
+    @Inject lateinit var mDb: DatabaseHelper
 
     private lateinit var mViewModel : MainViewModel
 
@@ -35,15 +40,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initRecyclerView()
-        fetchArticals()
 
+        mDb.getAllArtical()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { articals ->
+            println("AHIHI")
+        }
     }
 
     fun initRecyclerView() {
         getBinding().rvArtical.layoutManager = LinearLayoutManager(this)
-    }
-
-    fun fetchArticals() {
-        mViewModel.fetchArtical()
     }
 }

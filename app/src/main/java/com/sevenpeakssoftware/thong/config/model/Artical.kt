@@ -24,14 +24,13 @@ data class Artical (
     var dateTime: String?= null,
 
     @Expose
+    @SerializedName("image")
+    var image: ByteArray? = null,
+
+    @Expose
     @SerializedName("ingress")
     @ColumnInfo(name = "Ingress")
     var ingress: String?= null,
-
-    @Expose
-    @SerializedName("image")
-    @ColumnInfo(name = "Image")
-    var image: String?= null,
 
     @Expose
     @SerializedName("created")
@@ -43,3 +42,15 @@ data class Artical (
     @ColumnInfo(name = "Changed")
     var changed: String?= null
 )
+
+//{
+//    constructor(response: ArticalResponse): this(
+//        id = response.id,
+//        title = response.title,
+//        dateTime = response.dateTime,
+//        ingress = response.ingress,
+//        image = response.image,
+//        created = response.created,
+//        changed = response.changed
+//    )
+//}

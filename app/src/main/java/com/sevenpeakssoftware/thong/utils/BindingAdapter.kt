@@ -19,14 +19,16 @@ object BindingAdapter {
     @BindingAdapter("bind:urlArtical")
     fun bindUrl(imageView: ImageView, url: String) {
         val context = imageView.context
-
-        val density = context.resources.displayMetrics.density
-        val height = context.getSize().y / density
-        val width = context.getSize().x / density
+//        val density = context.resources.displayMetrics.density
+//        val height = (context.getSize().y / density).toInt()
+//        val width = (context.getSize().x / density).toInt()
+//        val height = context.getSize().y / 2
+//        val width = context.getSize().x
+//        imageView.layoutParams.width = width
+//        imageView.layoutParams.height = height
 
         Glide.with(context)
             .load(url)
-            .override(context.getSize().x,context.getSize().y / 2)
             .placeholder(R.drawable.default_thumb)
             .error(R.drawable.default_thumb)
             .into(imageView)

@@ -6,12 +6,14 @@ import androidx.room.Room
 import com.sevenpeakssoftware.thong.config.Constant
 import com.sevenpeakssoftware.thong.config.ViewModelProviderFactory
 import com.sevenpeakssoftware.thong.config.database.Database
+import com.sevenpeakssoftware.thong.config.database.DatabaseHelper
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -19,7 +21,8 @@ class Module {
 
     @Provides
     @Singleton
-    fun provideApplication(application: Application) = application
+    fun provideContext(application: Application): Context =
+        application
 
     @Provides
     @Singleton

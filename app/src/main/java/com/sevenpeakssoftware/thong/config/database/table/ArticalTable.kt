@@ -12,4 +12,10 @@ import kotlin.collections.List
 interface ArticalTable {
     @Query("SELECT * FROM tblArtical")
     fun loadAll(): List<Artical>;
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(articals: List<Artical>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(artical: Artical)
 }
