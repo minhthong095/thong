@@ -29,7 +29,6 @@ class MainViewModel(val mMainService: IMainService) : BaseViewModel() {
     val bindAdapter = MainAdapter()
 
     fun fetchArtical() {
-        println("FETCHHH")
         getDisposable().add(
             mMainService.getAllArtical()
                 .subscribeOn(Schedulers.io())
@@ -54,5 +53,5 @@ class MainAdapter : BaseRecycleViewAdapter<ItemArticalBinding, ArticalCellViewMo
 
     override fun getLayoutId(viewType: Int) = R.layout.item_artical
 
-    override fun getRatioHeight() = 0.5f
+    override fun getRatioHeight() = 0.6f
 }

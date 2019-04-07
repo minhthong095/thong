@@ -22,13 +22,6 @@ object BindingAdapter {
             .load(url)
             .placeholder(R.drawable.default_thumb)
             .error(R.drawable.default_thumb)
-            .centerCrop()
             .into(imageView)
-    }
-
-    @JvmStatic
-    @BindingAdapter("bind:textCaplocks")
-    fun bindAdapter(view: TextView, text: String) {
-        view.setText(text.capitalize())
     }
 }
