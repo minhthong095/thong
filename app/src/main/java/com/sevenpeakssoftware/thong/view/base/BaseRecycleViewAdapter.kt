@@ -58,7 +58,6 @@ abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
 
         mContext = parent.context
 
-
         mBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             getLayoutId(viewType),

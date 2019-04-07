@@ -24,4 +24,15 @@ object BindingAdapter {
             .error(R.drawable.default_thumb)
             .into(imageView)
     }
+
+    @JvmStatic
+    @BindingAdapter("bind:hourArtical")
+    fun bindHourArtical(textView: TextView, dateTime: String?) {
+        if(dateTime == null)
+            textView.setText("")
+        else if (android.text.format.DateFormat.is24HourFormat(textView.context))
+            textView.setText(dateTime.toOtherTimeFormat(toFormat = ", HH:mm"))
+        else
+            textView.setText(dateTime.toOtherTimeFormat(toFormat = ", hh:mm a"))
+    }
 }
