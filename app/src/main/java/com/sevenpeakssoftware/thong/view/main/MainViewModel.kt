@@ -21,6 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.io.ByteArrayOutputStream
 import com.bumptech.glide.request.transition.Transition
+import com.sevenpeakssoftware.thong.config.model.Content
 import io.reactivex.subjects.PublishSubject
 
 
@@ -106,6 +107,17 @@ class MainViewModel : BaseViewModel {
                 _saveItemWithImage(it)
             else
                 _saveItemWihtoutImage(it)
+
+//            if (it.content != null) {
+//                mDbHelper.insertContents(it.content!!.map { contentResponse ->
+//                    Content(
+//                        articleId = it.id,
+//                        type = contentResponse.type,
+//                        subject = contentResponse.subject,
+//                        description = contentResponse.description
+//                    )
+//                })
+//            }
         }
     }
 
@@ -117,7 +129,7 @@ class MainViewModel : BaseViewModel {
         )
     }
 
-    private fun _saveItem(article: Article) {
+    private fun _saveArtical(article: Article) {
         getDisposable().add(
             Observable.just(mDbHelper)
                 .subscribeOn(Schedulers.io())
@@ -126,7 +138,7 @@ class MainViewModel : BaseViewModel {
     }
 
     private fun _saveItemWihtoutImage(articleResponse: ArticleResponse) {
-        _saveItem(
+        _saveArtical(
             Article(
                 id = articleResponse.id,
                 title = articleResponse.title,
@@ -149,7 +161,7 @@ class MainViewModel : BaseViewModel {
                     bmp.compress(Bitmap.CompressFormat.PNG, 100, byteArray)
                     bmp.recycle()
 
-                    _saveItem(
+                    _saveArtical(
                         Article(
                             id = articleResponse.id,
                             title = articleResponse.title,
@@ -165,6 +177,7 @@ class MainViewModel : BaseViewModel {
     }
 }
 
-class MainAdapter : BaseRecycleViewAdapter<com.sevenpeakssoftware.thong.databinding.ItemArticleBinding, ArticleCellViewModel>() {
+class MainAdapter :
+    BaseRecycleViewAdapter<com.sevenpeakssoftware.thong.databinding.ItemArticleBinding, ArticleCellViewModel>() {
     override fun getLayoutId(viewType: Int) = R.layout.item_article
 }
