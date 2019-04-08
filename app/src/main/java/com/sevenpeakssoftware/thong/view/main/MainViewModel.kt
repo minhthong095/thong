@@ -63,24 +63,21 @@ class MainViewModel : BaseViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
+                    bindIsShowNoData.set(View.GONE)
+                    bindIsSwipe.onNext(false)
                     bindAdapter.itemSource.clear()
                     bindAdapter.itemSource.addAll(response.content!!.map(::ArticalCellViewModel))
                     _saveArticals(response.content!!)
-                    bindIsShowNoData.set(View.GONE)
-                    bindIsSwipe.onNext(false)
                 }, { throwable ->
+                    Toast.makeText(mContext, "Load new data failed.", Toast.LENGTH_LONG).show()
                     Log.e("FAIED", throwable.toString())
                     bindIsSwipe.onNext(false)
-                    Toast.makeText(mContext, "Load new data failed.", Toast.LENGTH_LONG).show()
                     if (bindAdapter.itemSource.size == 0)
                         _showOfflineArticals()
                 })
         )
     }
 
-    /**
-     * This function show offline data first and then get api to show online data.
-     */
     private fun _showOfflineArticals() {
         getDisposable().add(
             mDbHelper.getAllArtical()
@@ -99,12 +96,22 @@ class MainViewModel : BaseViewModel {
 
     private fun _saveArticals(articalsResponse: List<ArticalResponse>) {
 
+        _deleteAllArticals()
+
         articalsResponse.forEach {
             if (it.image != null)
                 _saveItemWithImage(it)
             else
                 _saveItemWihtoutImage(it)
         }
+    }
+
+    private fun _deleteAllArticals() {
+        getDisposable().add(
+            Observable.just(mDbHelper)
+                .subscribeOn(Schedulers.io())
+                .subscribe { db -> mDbHelper.deleteAllArtical() }
+        )
     }
 
     private fun _saveItem(artical: Artical) {
@@ -132,7 +139,6 @@ class MainViewModel : BaseViewModel {
         Glide.with(mContext)
             .asBitmap()
             .load(articalResponse.image)
-            .fitCenter()
             .into(object : SimpleTarget<Bitmap>() {
                 override fun onResourceReady(bmp: Bitmap, transition: Transition<in Bitmap>?) {
 

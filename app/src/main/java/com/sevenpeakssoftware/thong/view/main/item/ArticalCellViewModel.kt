@@ -11,28 +11,24 @@ class ArticalCellViewModel : BaseViewModel {
 
     val bindTitle = ObservableField<String>()
     val bindUrlImage = ObservableField<String?>()
-    val bindByteImage = ObservableField<ByteArray?>()
     val bindDate = ObservableField<String>()
     val bindIngress = ObservableField<String>()
     val bindHour = ObservableField<String?>()
+    val bindImage = ObservableField<Any?>()
 
-    constructor()
-
-    constructor(articalResponse: ArticalResponse) {
-        bindTitle.set(articalResponse.title ?: "")
-        bindUrlImage.set(articalResponse.image)
-        bindDate.set(_getCastDate(articalResponse.dateTime))
-        bindHour.set(articalResponse.dateTime)
-        bindIngress.set(articalResponse.ingress ?: "")
+    constructor(title: String?, image: Any?, dateTime: String?, ingress: String?) {
+        bindTitle.set(title ?: "")
+        bindImage.set(image)
+        bindDate.set(_getCastDate(dateTime))
+        bindHour.set(dateTime)
+        bindIngress.set(ingress ?: "")
     }
 
-    constructor(articalOffline: Artical) {
-        bindTitle.set(articalOffline.title ?: "")
-        bindByteImage.set(articalOffline.image)
-        bindDate.set(_getCastDate(articalOffline.dateTime))
-        bindHour.set(articalOffline.dateTime)
-        bindIngress.set(articalOffline.ingress ?: "")
-    }
+    constructor(articalResponse: ArticalResponse) :
+            this( articalResponse.title, articalResponse.image, articalResponse.dateTime, articalResponse.ingress)
+
+    constructor(artical: Artical) :
+            this( artical.title, artical.image, artical.dateTime, artical.ingress)
 
     private fun _getCastDate(raw: String?): String {
         if (raw == null) return ""

@@ -1,20 +1,12 @@
 package com.sevenpeakssoftware.thong.utils
 
-import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.sevenpeakssoftware.thong.R
-import com.squareup.picasso.Picasso
-import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 object BindingAdapter {
@@ -24,8 +16,8 @@ object BindingAdapter {
         adapter?.let { view.adapter = adapter }
 
     @JvmStatic
-    @BindingAdapter("bind:urlArtical")
-    fun bindUrl(imageView: ImageView, url: String?) {
+    @BindingAdapter("bind:image")
+    fun bindUrl(imageView: ImageView, imageData: Any?) {
         val context = imageView.context
 
 //        val density = context.resources.displayMetrics.density
@@ -36,19 +28,10 @@ object BindingAdapter {
 //        imageView.layoutParams.width = width
 //        imageView.layoutParams.height = height
 
-        Glide.with(context)
-            .load(url)
-            .error(R.drawable.default_thumb)
-            .centerCrop()
-            .into(imageView)
-    }
+        val loader = if (imageData is ByteArray) imageData as ByteArray else imageData as String
 
-    @JvmStatic
-    @BindingAdapter("bind:byteArtical")
-    fun bindByte(imageView: ImageView, byteArray: ByteArray?) {
-        val context = imageView.context
         Glide.with(context)
-            .load(byteArray)
+            .load(loader)
             .error(R.drawable.default_thumb)
             .centerCrop()
             .into(imageView)

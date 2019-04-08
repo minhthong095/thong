@@ -13,8 +13,8 @@ interface ArticalTable {
     @Query("SELECT * FROM tblArtical ORDER BY id DESC")
     fun loadAll(): List<Artical>;
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(articals: List<Artical>)
+    @Query("DELETE FROM tblArtical")
+    fun deleteAll()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(artical: Artical)

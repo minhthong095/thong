@@ -22,8 +22,7 @@
 
             <ImageView
                     android:id="@+id/imv"
-                    bind:urlArtical="@{itemViewModel.bindUrlImage}"
-                    bind:byteArtical="@{itemViewModel.bindByteImage}"
+                    bind:image="@{itemViewModel.bindImage}"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"/>
 
