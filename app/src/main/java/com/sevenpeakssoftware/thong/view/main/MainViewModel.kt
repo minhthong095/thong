@@ -39,7 +39,9 @@ class MainViewModel : BaseViewModel {
         mMainService = mainService
         mDbHelper = dbHelper
         mContext = context
+    }
 
+    override fun react() {
         _fetchArticles()
         _subscribeOnRefresh()
     }
@@ -56,18 +58,21 @@ class MainViewModel : BaseViewModel {
     }
 
     private fun _fetchArticles() {
+        bindIsSwipe.onNext(true)
         getDisposable().add(
             mMainService.getAllArticle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    bindIsShowNoData.set(View.GONE)
-                    bindIsSwipe.onNext(false)
                     bindAdapter.itemSource.clear()
                     bindAdapter.itemSource.addAll(response.content!!.map(::ArticleCellViewModel))
                     _saveArticles(response.content!!)
+                    bindIsShowNoData.set(View.GONE)
+                    bindIsSwipe.onNext(false)
                 }, { throwable ->
-                    Toast.makeText(mContext, "Load new data failed.", Toast.LENGTH_LONG).show()
+                    if (throwable is java.io.InterruptedIOException || throwable is java.net.UnknownHostException)
+                        Toast.makeText(mContext, "Load new data failed.", Toast.LENGTH_LONG).show()
+
                     Log.e("FAIED", throwable.toString())
                     bindIsSwipe.onNext(false)
                     if (bindAdapter.itemSource.size == 0)
