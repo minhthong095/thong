@@ -10,7 +10,7 @@ import kotlin.collections.List
 
 @Dao
 interface ArticalTable {
-    @Query("SELECT * FROM tblArtical")
+    @Query("SELECT * FROM tblArtical ORDER BY id DESC")
     fun loadAll(): List<Artical>;
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -45,7 +45,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { articals ->
-            println("AHIHI")
+            println("AHIHI "+ articals.size)
         }
     }
 

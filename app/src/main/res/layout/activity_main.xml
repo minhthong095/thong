@@ -17,16 +17,35 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvArtical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                bind:adapter="@{viewModel.bindAdapter}"
+        <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:layout_height="0dp">
+                android:visibility="@{viewModel.bindIsShowNoData}"
+                android:textSize="20sp"
+                android:textColor="#FFF"
+                android:text="@string/no_offline_data" />
 
-        </androidx.recyclerview.widget.RecyclerView>
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                bind:isSwipe="@{viewModel.bindIsSwipe}"
+                bind:onSwipe="@{viewModel.bindOnSwipeRefreshLayout}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvArtical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    bind:adapter="@{viewModel.bindAdapter}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

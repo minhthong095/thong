@@ -22,8 +22,8 @@
 
             <ImageView
                     android:id="@+id/imv"
-                    bind:urlArtical="@{itemViewModel.bindImage}"
-                    android:scaleType="centerCrop"
+                    bind:urlArtical="@{itemViewModel.bindUrlImage}"
+                    bind:byteArtical="@{itemViewModel.bindByteImage}"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"/>
 
