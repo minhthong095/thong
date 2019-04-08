@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "tblArtical")
-data class Artical (
+@Entity(tableName = "tblArticle")
+data class Article (
     @Expose
     @PrimaryKey
     var id: Long?= null,
@@ -44,7 +44,7 @@ data class Artical (
 )
 
 //{
-//    constructor(response: ArticalResponse): this(
+//    constructor(response: ArticleResponse): this(
 //        id = response.id,
 //        title = response.title,
 //        dateTime = response.dateTime,

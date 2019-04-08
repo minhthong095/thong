@@ -11,7 +11,6 @@ import com.sevenpeakssoftware.thong.databinding.ActivityMainBinding
 import com.sevenpeakssoftware.thong.view.base.BaseActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -41,15 +40,15 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         super.onCreate(savedInstanceState)
         initRecyclerView()
 
-        mDb.getAllArtical()
+        mDb.getAllArticle()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { articals ->
-            println("AHIHI "+ articals.size)
+            .subscribe { articles ->
+            println("AHIHI "+ articles.size)
         }
     }
 
     fun initRecyclerView() {
-        getBinding().rvArtical.layoutManager = LinearLayoutManager(this)
+        getBinding().rvArticle.layoutManager = LinearLayoutManager(this)
     }
 }

@@ -1,6 +1,6 @@
 package com.sevenpeakssoftware.thong.config.database
 
-import com.sevenpeakssoftware.thong.config.model.Artical
+import com.sevenpeakssoftware.thong.config.model.Article
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,17 +15,17 @@ class DatabaseHelper : IDatabaseHelper {
         mDb = db
     }
 
-    override fun getAllArtical(): Observable<List<Artical>> {
+    override fun getAllArticle(): Observable<List<Article>> {
         return Observable.create { emitter ->
-            emitter.onNext(mDb.tableArtical().loadAll())
+            emitter.onNext(mDb.tableArticle().loadAll())
         }
     }
 
-    override fun insertArtical(artical: Artical) {
-        mDb.tableArtical().insert(artical)
+    override fun insertArticle(article: Article) {
+        mDb.tableArticle().insert(article)
     }
 
-    override fun deleteAllArtical() {
-        mDb.tableArtical().deleteAll()
+    override fun deleteAllArticle() {
+        mDb.tableArticle().deleteAll()
     }
 }

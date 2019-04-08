@@ -2,9 +2,9 @@ package com.sevenpeakssoftware.thong.config.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ListArticalResponse(
+data class ListArticleResponse(
 
     @SerializedName("content")
-    var content: List<ArticalResponse>? = null
+    var content: List<ArticleResponse>? = null
 
 )

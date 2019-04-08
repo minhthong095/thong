@@ -38,8 +38,8 @@ object BindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("bind:hourArtical")
-    fun bindHourArtical(textView: TextView, dateTime: String?) {
+    @BindingAdapter("bind:hourArticle")
+    fun bindHourArticle(textView: TextView, dateTime: String?) {
         if (dateTime == null)
             textView.setText("")
         else if (android.text.format.DateFormat.is24HourFormat(textView.context))

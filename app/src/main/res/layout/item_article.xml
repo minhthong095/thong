@@ -5,7 +5,7 @@
     <data>
         <import type="android.view.View"/>
         <variable name="itemViewModel"
-                  type="com.sevenpeakssoftware.thong.view.main.item.ArticalCellViewModel"/>
+                  type="com.sevenpeakssoftware.thong.view.main.item.ArticleCellViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,7 +52,7 @@
 
         <TextView
                 android:id="@+id/txtHour"
-                bind:hourArtical="@{itemViewModel.bindHour}"
+                bind:hourArticle="@{itemViewModel.bindHour}"
                 android:textSize="16dp"
                 android:textColor="#a1a1a1"
                 app:layout_constraintBaseline_toBaselineOf="@id/txtDate"

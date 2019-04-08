@@ -1,16 +1,15 @@
 package com.sevenpeakssoftware.thong.view.main.item
 
 import androidx.databinding.ObservableField
-import com.sevenpeakssoftware.thong.config.model.Artical
-import com.sevenpeakssoftware.thong.config.model.ArticalResponse
+import com.sevenpeakssoftware.thong.config.model.Article
+import com.sevenpeakssoftware.thong.config.model.ArticleResponse
 import com.sevenpeakssoftware.thong.utils.toOtherTimeFormat
 import com.sevenpeakssoftware.thong.view.base.BaseViewModel
 import java.util.*
 
-class ArticalCellViewModel : BaseViewModel {
+class ArticleCellViewModel : BaseViewModel {
 
     val bindTitle = ObservableField<String>()
-    val bindUrlImage = ObservableField<String?>()
     val bindDate = ObservableField<String>()
     val bindIngress = ObservableField<String>()
     val bindHour = ObservableField<String?>()
@@ -24,11 +23,11 @@ class ArticalCellViewModel : BaseViewModel {
         bindIngress.set(ingress ?: "")
     }
 
-    constructor(articalResponse: ArticalResponse) :
-            this( articalResponse.title, articalResponse.image, articalResponse.dateTime, articalResponse.ingress)
+    constructor(articleResponse: ArticleResponse) :
+            this( articleResponse.title, articleResponse.image, articleResponse.dateTime, articleResponse.ingress)
 
-    constructor(artical: Artical) :
-            this( artical.title, artical.image, artical.dateTime, artical.ingress)
+    constructor(article: Article) :
+            this( article.title, article.image, article.dateTime, article.ingress)
 
     private fun _getCastDate(raw: String?): String {
         if (raw == null) return ""
@@ -37,13 +36,13 @@ class ArticalCellViewModel : BaseViewModel {
             .getInstance(TimeZone.getTimeZone(TimeZone.getDefault().id))
             .get(Calendar.YEAR)
 
-        val yearArtical = raw
+        val yearArticle = raw
             .toOtherTimeFormat(toFormat = "yyyy")
             .toInt()
 
         lateinit var showFormat: String
 
-        if (yearNow != yearArtical) showFormat = "dd MMMM yyyy"
+        if (yearNow != yearArticle) showFormat = "dd MMMM yyyy"
         else showFormat = "dd MMMM"
 
         return raw.toOtherTimeFormat(toFormat = showFormat)

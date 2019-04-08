@@ -2,7 +2,7 @@ package com.sevenpeakssoftware.thong.config.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ArticalResponse(
+data class ArticleResponse(
 
     @SerializedName("id")
     var id: Long? = null,
