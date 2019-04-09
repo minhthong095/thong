@@ -16,7 +16,6 @@ import com.sevenpeakssoftware.thong.BR
 import com.sevenpeakssoftware.thong.utils.getSize
 import java.lang.ref.WeakReference
 
-
 abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
     RecyclerView.Adapter<RecycleViewCell<CVM>>() {
 
@@ -109,7 +108,3 @@ abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
 
 class RecycleViewCell<CVM>(val binding: ViewDataBinding) :
     RecyclerView.ViewHolder(binding.root)
-
-//abstract class BaseArrayAdapter: ArrayAdapter<ViewModel>(context: Context, resource: Int) {
-//
-//}

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Cars</string>
     <string name="no_offline_data">There is no offline data available.</string>
+    <string name="new_data_failed">Load new data failed.</string>
 </resources>

@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.databinding.ObservableField
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
 import com.sevenpeakssoftware.thong.R
 import com.sevenpeakssoftware.thong.config.database.DatabaseHelper
 import com.sevenpeakssoftware.thong.config.model.Article
@@ -19,12 +18,8 @@ import com.sevenpeakssoftware.thong.view.main.item.ArticleCellViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.io.ByteArrayOutputStream
-import com.bumptech.glide.request.transition.Transition
 import com.sevenpeakssoftware.thong.config.model.Content
 import io.reactivex.subjects.PublishSubject
-import com.bumptech.glide.request.FutureTarget
-import com.sevenpeakssoftware.thong.config.model.ContentResponse
 
 
 class MainViewModel : BaseViewModel {
@@ -79,7 +74,7 @@ class MainViewModel : BaseViewModel {
                 }, { throwable ->
 
                     if (throwable is java.io.InterruptedIOException || throwable is java.net.UnknownHostException)
-                        Toast.makeText(mContext, "Load new data failed.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(mContext, mContext.getString(R.string.new_data_failed), Toast.LENGTH_LONG).show()
 
                     if (bindAdapter.itemSource.size == 0)
                         _showOfflineArticles()
