@@ -24,6 +24,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.sevenpeakssoftware.thong.config.model.Content
 import io.reactivex.subjects.PublishSubject
 import com.bumptech.glide.request.FutureTarget
+import com.sevenpeakssoftware.thong.config.model.ContentResponse
 
 
 class MainViewModel : BaseViewModel {
@@ -110,7 +111,7 @@ class MainViewModel : BaseViewModel {
     /**
      * This function is run from background to avoid skipping frame.
      */
-    private fun _saveArticles(ArticlesResponse: List<ArticleResponse>) {
+    private fun _saveArticles(listArticleResponse: List<ArticleResponse>) {
         getDisposable().add(
             Observable.just(mDbHelper)
                 .subscribeOn(Schedulers.newThread())
@@ -119,7 +120,7 @@ class MainViewModel : BaseViewModel {
 
                     db.deleteAllArticle()
 
-                    ArticlesResponse.forEach { articleResponse ->
+                    listArticleResponse.forEach { articleResponse ->
 
                         var byteImage: ByteArray? = null
                         if (articleResponse.image != null) {
@@ -143,10 +144,10 @@ class MainViewModel : BaseViewModel {
                             )
                         )
 
-//                        db.insertAllContent(
-//                            articleResponse.content!!.map { contentResponse ->
-//                                Content(articleResponse.id, contentResponse)
-//                            })
+                        db.insertAllContent(
+                            articleResponse.content!!.map { contentResponse ->
+                                Content(articleResponse.id, contentResponse)
+                            })
                     }
                 }
         )
