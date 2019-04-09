@@ -39,23 +39,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initRecyclerView()
-
-        mDb.getAllArticle()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { articles ->
-            println("articles "+ articles.size)
-        }
-
-        mDb.getAllContent()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { articles ->
-                println("content "+ articles.size)
-            }
     }
 
     fun initRecyclerView() {
         getBinding().rvArticle.layoutManager = LinearLayoutManager(this)
+        getBinding().rvArticle.adapter = mViewModel.bindAdapter
     }
 }

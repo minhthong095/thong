@@ -30,7 +30,6 @@ class Module {
     @Singleton
     fun provideDatabase(context: Context): Database =
         Room.databaseBuilder(context, Database::class.java, Constant.DB_NAME)
-            .fallbackToDestructiveMigrationFrom(Constant.DB_VERSION - 1)
             .build()
 
     @Provides
@@ -45,12 +44,11 @@ class Module {
 
     @Provides
     fun buildOkHttpClient(context: Context): OkHttpClient {
-        val TIME_OUT = 10L
         return OkHttpClient.Builder()
-            .callTimeout(TIME_OUT, TimeUnit.SECONDS)
-            .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
-            .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
-            .readTimeout(TIME_OUT, TimeUnit.SECONDS)
+            .callTimeout(Constant.TIME_OUT, TimeUnit.SECONDS)
+            .connectTimeout(Constant.TIME_OUT, TimeUnit.SECONDS)
+            .writeTimeout(Constant.TIME_OUT, TimeUnit.SECONDS)
+            .readTimeout(Constant.TIME_OUT, TimeUnit.SECONDS)
             .build()
     }
 }
