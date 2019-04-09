@@ -11,7 +11,8 @@ import com.google.gson.annotations.SerializedName
 data class Article (
     @Expose
     @PrimaryKey
-    var id: Long?= null,
+    @ColumnInfo(name = "IdArticle")
+    var idArticle: Long?= null,
 
     @Expose
     @SerializedName("title")

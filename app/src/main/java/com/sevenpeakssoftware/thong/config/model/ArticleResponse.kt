@@ -33,7 +33,6 @@ data class ArticleResponse(
 )
 
 data class ContentResponse (
-
     @SerializedName("type")
     var type: String? = null,
 

@@ -5,17 +5,13 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.sevenpeakssoftware.thong.config.model.Article
-
-import kotlin.collections.List
+import com.sevenpeakssoftware.thong.config.model.Content
 
 @Dao
-interface ArticelTable {
-    @Query("SELECT * FROM tblArticle ORDER BY id DESC")
-    fun loadAll(): List<Article>;
-
-    @Query("DELETE FROM tblArticle")
-    fun deleteAll()
-
+interface TableContent {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(article: Article)
+    fun insertAll(contents: List<Content>)
+
+    @Query("SELECT * FROM tblContent")
+    fun loadAll(): List<Content>;
 }

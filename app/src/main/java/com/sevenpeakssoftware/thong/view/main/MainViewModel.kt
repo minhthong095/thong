@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream
 import com.bumptech.glide.request.transition.Transition
 import com.sevenpeakssoftware.thong.config.model.Content
 import io.reactivex.subjects.PublishSubject
+import com.bumptech.glide.request.FutureTarget
 
 
 class MainViewModel : BaseViewModel {
@@ -62,22 +63,30 @@ class MainViewModel : BaseViewModel {
         bindIsSwipe.onNext(true)
         getDisposable().add(
             mMainService.getAllArticle()
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
+
                     bindAdapter.itemSource.clear()
                     bindAdapter.itemSource.addAll(response.content!!.map(::ArticleCellViewModel))
+
                     _saveArticles(response.content!!)
+
                     bindIsShowNoData.set(View.GONE)
                     bindIsSwipe.onNext(false)
+
                 }, { throwable ->
+
                     if (throwable is java.io.InterruptedIOException || throwable is java.net.UnknownHostException)
                         Toast.makeText(mContext, "Load new data failed.", Toast.LENGTH_LONG).show()
 
-                    Log.e("FAIED", throwable.toString())
-                    bindIsSwipe.onNext(false)
                     if (bindAdapter.itemSource.size == 0)
                         _showOfflineArticles()
+
+                    bindIsSwipe.onNext(false)
+
+                    Log.e("FAIED", throwable.toString())
+
                 })
         )
     }
@@ -85,7 +94,7 @@ class MainViewModel : BaseViewModel {
     private fun _showOfflineArticles() {
         getDisposable().add(
             mDbHelper.getAllArticle()
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ offlineData ->
                     if (offlineData.isEmpty())
@@ -98,86 +107,54 @@ class MainViewModel : BaseViewModel {
         )
     }
 
+    /**
+     * This function is run from background to avoid skipping frame.
+     */
     private fun _saveArticles(ArticlesResponse: List<ArticleResponse>) {
-
-        _deleteAllArticles()
-
-        ArticlesResponse.forEach {
-            if (it.image != null)
-                _saveItemWithImage(it)
-            else
-                _saveItemWihtoutImage(it)
-
-//            if (it.content != null) {
-//                mDbHelper.insertContents(it.content!!.map { contentResponse ->
-//                    Content(
-//                        articleId = it.id,
-//                        type = contentResponse.type,
-//                        subject = contentResponse.subject,
-//                        description = contentResponse.description
-//                    )
-//                })
-//            }
-        }
-    }
-
-    private fun _deleteAllArticles() {
         getDisposable().add(
             Observable.just(mDbHelper)
-                .subscribeOn(Schedulers.io())
-                .subscribe { db -> mDbHelper.deleteAllArticle() }
-        )
-    }
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.computation())
+                .subscribe { db ->
 
-    private fun _saveArtical(article: Article) {
-        getDisposable().add(
-            Observable.just(mDbHelper)
-                .subscribeOn(Schedulers.io())
-                .subscribe { db -> db.insertArticle(article) }
-        )
-    }
+                    db.deleteAllArticle()
 
-    private fun _saveItemWihtoutImage(articleResponse: ArticleResponse) {
-        _saveArtical(
-            Article(
-                id = articleResponse.id,
-                title = articleResponse.title,
-                ingress = articleResponse.ingress,
-                dateTime = articleResponse.dateTime,
-                created = articleResponse.created,
-                changed = articleResponse.changed
-            )
-        )
-    }
+                    ArticlesResponse.forEach { articleResponse ->
 
-    private fun _saveItemWithImage(articleResponse: ArticleResponse) {
-        Glide.with(mContext)
-            .asBitmap()
-            .load(articleResponse.image)
-            .into(object : SimpleTarget<Bitmap>() {
-                override fun onResourceReady(bmp: Bitmap, transition: Transition<in Bitmap>?) {
+                        var byteImage: ByteArray? = null
+                        if (articleResponse.image != null) {
+                            val futureTarget = Glide.with(mContext)
+                                .`as`(ByteArray::class.java)
+                                .load(articleResponse.image)
+                                .submit()
+                            byteImage = futureTarget.get()
+                            Glide.with(mContext).clear(futureTarget)
+                        }
 
-                    val byteArray = ByteArrayOutputStream()
-                    bmp.compress(Bitmap.CompressFormat.PNG, 100, byteArray)
-                    bmp.recycle()
-
-                    _saveArtical(
-                        Article(
-                            id = articleResponse.id,
-                            title = articleResponse.title,
-                            ingress = articleResponse.ingress,
-                            dateTime = articleResponse.dateTime,
-                            created = articleResponse.created,
-                            changed = articleResponse.changed,
-                            image = byteArray.toByteArray()
+                        db.insertArticle(
+                            Article(
+                                idArticle = articleResponse.id,
+                                title = articleResponse.title,
+                                ingress = articleResponse.ingress,
+                                dateTime = articleResponse.dateTime,
+                                created = articleResponse.created,
+                                changed = articleResponse.changed,
+                                image = byteImage
+                            )
                         )
-                    )
+
+//                        db.insertAllContent(
+//                            articleResponse.content!!.map { contentResponse ->
+//                                Content(articleResponse.id, contentResponse)
+//                            })
+                    }
                 }
-            })
+        )
     }
 }
 
 class MainAdapter :
     BaseRecycleViewAdapter<com.sevenpeakssoftware.thong.databinding.ItemArticleBinding, ArticleCellViewModel>() {
+
     override fun getLayoutId(viewType: Int) = R.layout.item_article
 }

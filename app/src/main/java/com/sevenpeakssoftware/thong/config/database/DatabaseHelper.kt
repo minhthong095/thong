@@ -7,26 +7,35 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DatabaseHelper : IDatabaseHelper {
+class DatabaseHelper @Inject constructor(private val mDb: Database) : IDatabaseHelper {
 
-    private val mDb: Database
+    //////////////////////////
+    ///// TABLE ARTICLE //////
+    /////////////////////////
 
-    @Inject
-    constructor(db: Database) {
-        mDb = db
-    }
-
-    override fun insertContents(content: List<Content>) =
-        mDb.tableContent().insertAll(content)
-
-    override fun getAllArticle(): Observable<List<Article>> =
-        Observable.create { emitter ->
+    override fun getAllArticle(): Observable<List<Article>> {
+        return Observable.create { emitter ->
             emitter.onNext(mDb.tableArticle().loadAll())
         }
+    }
 
     override fun insertArticle(article: Article) =
         mDb.tableArticle().insert(article)
 
     override fun deleteAllArticle() =
         mDb.tableArticle().deleteAll()
+
+
+    //////////////////////////
+    ///// TABLE CONTENT //////
+    /////////////////////////
+
+    override fun insertAllContent(contents: List<Content>) =
+        mDb.tableContent().insertAll(contents)
+
+    override fun getAllContent(): Observable<List<Content>> {
+        return Observable.create { emitter ->
+            emitter.onNext(mDb.tableContent().loadAll())
+        }
+    }
 }

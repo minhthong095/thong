@@ -12,21 +12,23 @@ import com.google.gson.annotations.SerializedName
     foreignKeys = arrayOf(
         ForeignKey(
             entity = Article::class,
-            parentColumns = arrayOf("id"),
-            childColumns = arrayOf("articleId"),
-            onDelete = ForeignKey.CASCADE
+            parentColumns = arrayOf("IdArticle"),
+            childColumns = arrayOf("IdContent"),
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
         )
     )
 )
 data class Content(
     @Expose
     @PrimaryKey(autoGenerate = true)
-    var contentid: Int? = null,
+    @ColumnInfo(name = "IdContent")
+    var idContent: Int? = null,
 
     @Expose
-    @SerializedName("articleId")
-    @ColumnInfo(name = "ArticleId")
-    var articleId: Long? = null,
+    @SerializedName("idArticle")
+    @ColumnInfo(name = "IdArticle")
+    var idArticle: Long? = null,
 
     @Expose
     @SerializedName("type")
@@ -44,14 +46,11 @@ data class Content(
     var description: String? = null
 )
 
-//{
-//    constructor(response: ArticleResponse): this(
-//        id = response.id,
-//        title = response.title,
-//        dateTime = response.dateTime,
-//        ingress = response.ingress,
-//        image = response.image,
-//        created = response.created,
-//        changed = response.changed
-//    )
-//}
+{
+    constructor(idArticle: Long?, response: ContentResponse): this(
+        idArticle = idArticle,
+        type = response.type,
+        subject = response.subject,
+        description = response.description
+    )
+}

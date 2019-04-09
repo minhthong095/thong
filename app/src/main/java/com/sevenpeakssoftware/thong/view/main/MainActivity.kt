@@ -40,7 +40,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         super.onCreate(savedInstanceState)
         initRecyclerView()
 
-        mDb.getAllArticle()
+        mDb.getAllContent()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { articles ->
