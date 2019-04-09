@@ -7,6 +7,7 @@ import com.sevenpeakssoftware.thong.config.Constant
 import com.sevenpeakssoftware.thong.config.ViewModelProviderFactory
 import com.sevenpeakssoftware.thong.config.database.Database
 import com.sevenpeakssoftware.thong.config.database.DatabaseHelper
+import com.sevenpeakssoftware.thong.config.database.MIGRATION_1_2
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -30,6 +31,7 @@ class Module {
     @Singleton
     fun provideDatabase(context: Context): Database =
         Room.databaseBuilder(context, Database::class.java, Constant.DB_NAME)
+//            .addMigrations(MIGRATION_1_2)
             .build()
 
     @Provides

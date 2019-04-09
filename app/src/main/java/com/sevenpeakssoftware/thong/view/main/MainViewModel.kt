@@ -111,7 +111,7 @@ class MainViewModel : BaseViewModel {
             Observable.just(mDbHelper)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.computation())
-                .subscribe { db ->
+                .subscribe ({ db ->
 
                     db.deleteAllArticle()
 
@@ -144,7 +144,7 @@ class MainViewModel : BaseViewModel {
                                 Content(articleResponse.id, contentResponse)
                             })
                     }
-                }
+                }, { throwable -> })
         )
     }
 }
