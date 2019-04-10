@@ -3,7 +3,6 @@
         xmlns:bind="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
         <variable name="itemViewModel"
                   type="com.sevenpeakssoftware.thong.view.main.item.ArticleCellViewModel"/>
     </data>

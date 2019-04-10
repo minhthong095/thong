@@ -22,13 +22,13 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        _runViewBinding()
+        runViewBinding()
         getViewModel().react()
     }
 
     fun getBinding() = mViewBinding
 
-    private fun _runViewBinding() {
+    open fun runViewBinding() {
         mViewBinding = DataBindingUtil.setContentView(this, getLayoutId())
         mViewBinding.setVariable(getBindingVariable(), getViewModel())
         mViewBinding.executePendingBindings()

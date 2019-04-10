@@ -31,23 +31,38 @@ abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
         itemSource.addOnListChangedCallback(ListChangedCallBack<CB, CVM>(this as BaseRecycleViewAdapter<ViewDataBinding, ViewModel>))
     }
 
-    private fun _calHeightCell() = (getRatioHeight() * getContext().getSize().y).toInt()
-
     fun getContext() = mContext
+
 
     fun getBinding() = mBinding
 
+
+    private fun _calHeightCell() = (getRatioHeight() * getContext().getSize().y).toInt()
+
+
     abstract fun getLayoutId(viewType: Int): Int
+
 
     open fun getItemType(position: Int) = 0
 
+
+    /**
+     * This ratio correspond with screen height
+     *
+     * Function will work when its override and set new value larger than zero
+     * from inheritance class
+     */
     open fun getRatioHeight(): Float = 0f
+
 
     open fun getCell(binder: ViewDataBinding) = RecycleViewCell<CVM>(binder)
 
+
     override fun getItemCount() = itemSource.count()
 
+
     override fun getItemViewType(position: Int) = getItemType(position)
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecycleViewCell<CVM> {
 
@@ -61,10 +76,11 @@ abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
         )
 
         if (getRatioHeight() > 0)
-        mBinding.apply { root.layoutParams.height = _calHeightCell() }
+            mBinding.apply { root.layoutParams.height = _calHeightCell() }
 
         return getCell(mBinding)
     }
+
 
     override fun onBindViewHolder(holder: RecycleViewCell<CVM>, position: Int) {
         val cvm = itemSource[position]

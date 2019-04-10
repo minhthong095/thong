@@ -7,8 +7,6 @@
         tools:context=".view.main.MainActivity">
 
     <data>
-        <import type="android.view.View"/>
-
         <variable name="viewModel" type="com.sevenpeakssoftware.thong.view.main.MainViewModel"/>
     </data>
 

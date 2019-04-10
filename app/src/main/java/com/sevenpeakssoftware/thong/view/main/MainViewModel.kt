@@ -25,7 +25,7 @@ import io.reactivex.subjects.PublishSubject
 class MainViewModel : BaseViewModel {
 
     val bindAdapter = MainAdapter()
-    val bindIsSwipe: PublishSubject<Boolean> = PublishSubject.create()
+    val bindIsSwipe: ObservableField<Boolean> = ObservableField()
     val bindOnSwipeRefreshLayout: PublishSubject<SwipeRefreshLayout> = PublishSubject.create()
     val bindIsShowNoData = ObservableField<Int>(View.GONE)
 
@@ -56,7 +56,7 @@ class MainViewModel : BaseViewModel {
     }
 
     private fun _fetchArticles() {
-        bindIsSwipe.onNext(true)
+        bindIsSwipe.set(true)
         getDisposable().add(
             mMainService.getAllArticle()
                 .subscribeOn(Schedulers.newThread())
@@ -69,7 +69,7 @@ class MainViewModel : BaseViewModel {
                     _saveArticles(response.content!!)
 
                     bindIsShowNoData.set(View.GONE)
-                    bindIsSwipe.onNext(false)
+                    bindIsSwipe.set(false)
 
                 }, { throwable ->
 
@@ -79,7 +79,7 @@ class MainViewModel : BaseViewModel {
                     if (bindAdapter.itemSource.size == 0)
                         _showOfflineArticles()
 
-                    bindIsSwipe.onNext(false)
+                    bindIsSwipe.set(false)
 
                     Log.e("FAIED", throwable.toString())
 

@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.sevenpeakssoftware.thong.R
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 object BindingAdapter {
@@ -39,8 +41,8 @@ object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter("bind:isSwipe")
-    fun bindIsSwipe(swipeRefreshLayout: SwipeRefreshLayout, swipeObserver: PublishSubject<Boolean>) {
-        swipeObserver.subscribe { swipeRefreshLayout.isRefreshing = it }
+    fun bindIsSwipe(swipeRefreshLayout: SwipeRefreshLayout, value: Boolean) {
+        swipeRefreshLayout.isRefreshing = value
     }
 
     @JvmStatic
