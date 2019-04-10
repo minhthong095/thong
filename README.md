@@ -7,6 +7,11 @@
 - Show alert and text warning when reach error.
 - Support migration.
 
+## Attachment
+APK file and Database file are located at root project folder with following name: 
+- com.sevenpeakssoftware.thong.apk
+- com.sevenpeakssoftware.thong.db
+
 ## Architecture
 #### MVVM Design Pattern
 #### Base Classes
