@@ -42,7 +42,7 @@ class MainViewModel : BaseViewModel {
         _subscribeOnRefresh()
     }
 
-    /**ation
+    /**
      * If you want fetch new data when rotate or re-created activity
      */
     override fun react() {
@@ -65,7 +65,6 @@ class MainViewModel : BaseViewModel {
         getDisposable().add(
             mMainService.getAllArticle()
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
                 .takeWhile { it.content != null && it.content!!.isNotEmpty()}
                 .doOnNext { _saveArticles(it!!.content!!) }
                 .observeOn(AndroidSchedulers.mainThread())
