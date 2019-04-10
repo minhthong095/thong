@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "tblContent",
-    foreignKeys = arrayOf(
+    foreignKeys = [
         ForeignKey(
             entity = Article::class,
             parentColumns = arrayOf("IdArticle"),
@@ -15,10 +15,10 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
         )
-    )
+    ]
 )
 data class Content(
-    
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "IdContent")
     var idContent: Long? = null,
@@ -29,16 +29,14 @@ data class Content(
     @ColumnInfo(name = "Type")
     var type: String? = null,
 
-    
+
     @ColumnInfo(name = "Subject")
     var subject: String? = null,
 
     @ColumnInfo(name = "Description")
     var description: String? = null
-)
-
-{
-    constructor(idArticle: Long?, response: ContentResponse): this(
+) {
+    constructor(idArticle: Long?, response: ContentResponse) : this(
         idArticle = idArticle,
         type = response.type,
         subject = response.subject,

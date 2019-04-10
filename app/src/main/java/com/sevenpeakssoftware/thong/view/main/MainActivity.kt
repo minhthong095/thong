@@ -9,8 +9,6 @@ import com.sevenpeakssoftware.thong.config.ViewModelProviderFactory
 import com.sevenpeakssoftware.thong.config.database.DatabaseHelper
 import com.sevenpeakssoftware.thong.databinding.ActivityMainBinding
 import com.sevenpeakssoftware.thong.view.base.BaseActivity
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,10 +36,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initRecyclerView()
+        _initRecyclerView()
     }
 
-    fun initRecyclerView() {
+    private fun _initRecyclerView() {
         getBinding().rvArticle.layoutManager = LinearLayoutManager(this)
         getBinding().rvArticle.adapter = mViewModel.bindAdapter
     }

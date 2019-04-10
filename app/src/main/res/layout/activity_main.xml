@@ -21,10 +21,9 @@
                 android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:visibility="@{viewModel.bindIsShowNoData}"
                 android:textSize="20sp"
                 android:textColor="#FFF"
-                android:text="@string/no_offline_data" />
+                android:text="@{viewModel.bindShowWarning}" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 bind:isSwipe="@{viewModel.bindIsSwipe}"

@@ -1,7 +1,6 @@
 package com.sevenpeakssoftware.thong.view.main
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -27,7 +26,7 @@ class MainViewModel : BaseViewModel {
     val bindAdapter = MainAdapter()
     val bindIsSwipe: ObservableField<Boolean> = ObservableField()
     val bindOnSwipeRefreshLayout: PublishSubject<SwipeRefreshLayout> = PublishSubject.create()
-    val bindIsShowNoData = ObservableField<Int>(View.GONE)
+    val bindShowWarning = ObservableField<String>("")
 
     private val mMainService: IMainService
     private val mDbHelper: DatabaseHelper
@@ -37,19 +36,25 @@ class MainViewModel : BaseViewModel {
         mMainService = mainService
         mDbHelper = dbHelper
         mContext = context
-    }
 
-    override fun react() {
+        // These function have to put here to avoid load again when activity re-created ( Rotation )
         _fetchArticles()
         _subscribeOnRefresh()
+    }
+
+    /**ation
+     * If you want fetch new data when rotate or re-created activity
+     */
+    override fun react() {
+//        _fetchArticles()
+//        _subscribeOnRefresh()
     }
 
     private fun _subscribeOnRefresh() {
         getDisposable().add(
             bindOnSwipeRefreshLayout
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { view ->
+                .subscribe {
                     _fetchArticles()
                 }
         )
@@ -59,22 +64,27 @@ class MainViewModel : BaseViewModel {
         bindIsSwipe.set(true)
         getDisposable().add(
             mMainService.getAllArticle()
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+                .takeWhile { it.content != null && it.content!!.isNotEmpty()}
+                .doOnNext { _saveArticles(it!!.content!!) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
 
                     bindAdapter.itemSource.clear()
                     bindAdapter.itemSource.addAll(response.content!!.map(::ArticleCellViewModel))
 
-                    _saveArticles(response.content!!)
-
-                    bindIsShowNoData.set(View.GONE)
+                    bindShowWarning.set("")
                     bindIsSwipe.set(false)
 
                 }, { throwable ->
 
                     if (throwable is java.io.InterruptedIOException || throwable is java.net.UnknownHostException)
-                        Toast.makeText(mContext, mContext.getString(R.string.new_data_failed), Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            mContext,
+                            mContext.getString(R.string.new_data_failed),
+                            Toast.LENGTH_LONG
+                        ).show()
 
                     if (bindAdapter.itemSource.size == 0)
                         _showOfflineArticles()
@@ -94,11 +104,12 @@ class MainViewModel : BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ offlineData ->
                     if (offlineData.isEmpty())
-                        bindIsShowNoData.set(View.VISIBLE)
+                        bindShowWarning.set(mContext.getString(R.string.no_offline_data))
                     else
                         bindAdapter.itemSource.addAll(offlineData.map(::ArticleCellViewModel))
-                }, { throwable ->
-                    bindIsShowNoData.set(View.VISIBLE)
+                }, { _ ->
+                    if (bindAdapter.itemSource.size == 0)
+                        bindShowWarning.set(mContext.getString(R.string.failed_load_offline_data))
                 })
         )
     }
@@ -111,7 +122,7 @@ class MainViewModel : BaseViewModel {
             Observable.just(mDbHelper)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.computation())
-                .subscribe ({ db ->
+                .subscribe({ db ->
 
                     db.deleteAllArticle()
 
@@ -144,7 +155,7 @@ class MainViewModel : BaseViewModel {
                                 Content(articleResponse.id, contentResponse)
                             })
                     }
-                }, { throwable -> })
+                }, { })
         )
     }
 }
