@@ -8,12 +8,15 @@ abstract class BaseViewModel : ViewModel() {
 
     val _disposable = CompositeDisposable()
 
+
     override fun onCleared() {
         _disposable.dispose()
         super.onCleared()
     }
 
+
     open fun react() {}
+
 
     fun getDisposable() = _disposable
 }

@@ -13,11 +13,18 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
 
     private lateinit var mViewBinding: T
 
+
     abstract fun getViewModel(): V
+
 
     abstract fun getBindingVariable(): Int
 
+
     abstract fun getLayoutId(): Int
+
+
+    fun getBinding() = mViewBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -26,7 +33,6 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
         getViewModel().react()
     }
 
-    fun getBinding() = mViewBinding
 
     open fun runViewBinding() {
         mViewBinding = DataBindingUtil.setContentView(this, getLayoutId())
