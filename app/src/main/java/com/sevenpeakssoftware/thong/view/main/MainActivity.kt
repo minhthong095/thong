@@ -33,14 +33,4 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     override fun getLayoutId(): Int {
         return R.layout.activity_main
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _initRecyclerView()
-    }
-
-    private fun _initRecyclerView() {
-        getBinding().rvArticle.layoutManager = LinearLayoutManager(this)
-        getBinding().rvArticle.adapter = mViewModel.bindAdapter
-    }
 }
