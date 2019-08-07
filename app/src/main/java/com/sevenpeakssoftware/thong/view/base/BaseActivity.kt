@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatActivity() {
 
-    private lateinit var mViewBinding: T
+    lateinit var viewBinding: T
 
 
     abstract fun getViewModel(): V
@@ -22,10 +22,6 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
 
     abstract fun getLayoutId(): Int
 
-
-    fun getBinding() = mViewBinding
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -33,10 +29,9 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
         getViewModel().react()
     }
 
-
-    open fun runViewBinding() {
-        mViewBinding = DataBindingUtil.setContentView(this, getLayoutId())
-        mViewBinding.setVariable(getBindingVariable(), getViewModel())
-        mViewBinding.executePendingBindings()
+    private fun runViewBinding() {
+        viewBinding = DataBindingUtil.setContentView(this, getLayoutId())
+        viewBinding.setVariable(getBindingVariable(), getViewModel())
+        viewBinding.executePendingBindings()
     }
 }

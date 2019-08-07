@@ -21,8 +21,6 @@ abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
 
     val itemSource: ObservableArrayList<CVM> = ObservableArrayList()
 
-    private lateinit var mContext: Context
-
     private lateinit var mBinding: CB
 
     private var mHeightCell = 0
@@ -30,14 +28,6 @@ abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
     init {
         itemSource.addOnListChangedCallback(ListChangedCallBack<CB, CVM>(this as BaseRecycleViewAdapter<ViewDataBinding, ViewModel>))
     }
-
-    fun getContext() = mContext
-
-
-    fun getBinding() = mBinding
-
-
-    private fun _calHeightCell() = (getRatioHeight() * getContext().getSize().y).toInt()
 
 
     abstract fun getLayoutId(viewType: Int): Int
@@ -66,17 +56,12 @@ abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecycleViewCell<CVM> {
 
-        mContext = parent.context
-
         mBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             getLayoutId(viewType),
             parent,
             false
         )
-
-        if (getRatioHeight() > 0)
-            mBinding.apply { root.layoutParams.height = _calHeightCell() }
 
         return getCell(mBinding)
     }
