@@ -66,6 +66,9 @@ dependencies {
 
     androidTestImplementation "androidx.test:runner:$rootProject.ext.runnerVersion"
     androidTestImplementation "androidx.test.espresso:$rootProject.ext.espressoVersion"
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-2'
+
 }
 
 kapt {
