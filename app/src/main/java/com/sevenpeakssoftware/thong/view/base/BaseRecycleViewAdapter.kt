@@ -51,33 +51,6 @@ abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel>: Re
         holder.binding.executePendingBindings()
     }
 
-    private val weakCallback: WeakReference<ObservableList.OnListChangedCallback<ObservableArrayList<CVM>>> = WeakReference(object : ObservableList.OnListChangedCallback<ObservableArrayList<CVM>>() {
-        override fun onChanged(sender: ObservableArrayList<CVM>?) {
-            notifyDataSetChanged()
-        }
-
-        override fun onItemRangeRemoved(sender: ObservableArrayList<CVM>?, positionStart: Int, itemCount: Int) {
-            notifyItemRangeRemoved(positionStart, itemCount)
-        }
-
-        override fun onItemRangeMoved(
-            sender: ObservableArrayList<CVM>?,
-            fromPosition: Int,
-            toPosition: Int,
-            itemCount: Int
-        ) {
-            notifyItemMoved(fromPosition, toPosition)
-        }
-
-        override fun onItemRangeInserted(sender: ObservableArrayList<CVM>?, positionStart: Int, itemCount: Int) {
-            notifyItemRangeInserted(positionStart, itemCount)
-        }
-
-        override fun onItemRangeChanged(sender: ObservableArrayList<CVM>?, positionStart: Int, itemCount: Int) {
-            notifyItemRangeChanged(positionStart, itemCount)
-        }
-    })
-
     private val mObservableListCallback = object : ObservableList.OnListChangedCallback<ObservableArrayList<CVM>>() {
         override fun onChanged(sender: ObservableArrayList<CVM>?) {
             notifyDataSetChanged()
