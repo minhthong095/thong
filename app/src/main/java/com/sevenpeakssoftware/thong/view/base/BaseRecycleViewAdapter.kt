@@ -15,23 +15,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sevenpeakssoftware.thong.BR
 import com.sevenpeakssoftware.thong.utils.getSize
 import java.lang.ref.WeakReference
+import java.security.CodeSource
 
 abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
-    RecyclerView.Adapter<RecycleViewCell<CVM>>() {
+    RecyclerView.Adapter<RecycleViewCell<CVM>> {
 
-    val itemSource: ObservableArrayList<CVM> = ObservableArrayList()
-
+    private lateinit var itemSource: ObservableArrayList<CVM>
     private lateinit var mBinding: CB
 
     private var mHeightCell = 0
 
-    init {
+    constructor(source: ObservableArrayList<CVM>) {
+        itemSource = source
         itemSource.addOnListChangedCallback(ListChangedCallBack<CB, CVM>(this as BaseRecycleViewAdapter<ViewDataBinding, ViewModel>))
     }
 
-
     abstract fun getLayoutId(viewType: Int): Int
-
 
     open fun getItemType(position: Int) = 0
 

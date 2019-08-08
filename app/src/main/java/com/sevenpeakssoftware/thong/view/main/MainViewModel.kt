@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
@@ -23,7 +24,7 @@ import io.reactivex.subjects.PublishSubject
 
 class MainViewModel : BaseViewModel {
 
-    val bindAdapter = MainAdapter()
+    val itemSource = ObservableArrayList<ArticleCellViewModel>()
     val bindIsSwipe: ObservableField<Boolean> = ObservableField()
     val bindOnSwipeRefreshLayout: PublishSubject<SwipeRefreshLayout> = PublishSubject.create()
     val bindShowWarning = ObservableField<String>("")
@@ -70,8 +71,8 @@ class MainViewModel : BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
 
-                    bindAdapter.itemSource.clear()
-                    bindAdapter.itemSource.addAll(response.content!!.map(::ArticleCellViewModel))
+                    itemSource.clear()
+                    itemSource.addAll(response.content!!.map(::ArticleCellViewModel))
 
                     bindShowWarning.set("")
                     bindIsSwipe.set(false)
@@ -85,7 +86,7 @@ class MainViewModel : BaseViewModel {
                             Toast.LENGTH_LONG
                         ).show()
 
-                    if (bindAdapter.itemSource.size == 0)
+                    if (itemSource.size == 0)
                         _showOfflineArticles()
 
                     bindIsSwipe.set(false)
@@ -105,9 +106,9 @@ class MainViewModel : BaseViewModel {
                     if (offlineData.isEmpty())
                         bindShowWarning.set(mContext.getString(R.string.no_offline_data))
                     else
-                        bindAdapter.itemSource.addAll(offlineData.map(::ArticleCellViewModel))
+                        itemSource.addAll(offlineData.map(::ArticleCellViewModel))
                 }, { _ ->
-                    if (bindAdapter.itemSource.size == 0)
+                    if (itemSource.size == 0)
                         bindShowWarning.set(mContext.getString(R.string.failed_load_offline_data))
                 })
         )
@@ -159,8 +160,8 @@ class MainViewModel : BaseViewModel {
     }
 }
 
-class MainAdapter :
-    BaseRecycleViewAdapter<com.sevenpeakssoftware.thong.databinding.ItemArticleBinding, ArticleCellViewModel>() {
+class MainAdapter(source: ObservableArrayList<ArticleCellViewModel>) :
+    BaseRecycleViewAdapter<com.sevenpeakssoftware.thong.databinding.ItemArticleBinding, ArticleCellViewModel>(source) {
 
     override fun getLayoutId(viewType: Int) = R.layout.item_article
 }

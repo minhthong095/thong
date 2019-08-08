@@ -37,6 +37,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewBinding.rvArticle.adapter = mViewModel.bindAdapter
+        viewBinding.rvArticle.adapter = MainAdapter(mViewModel.itemSource)
     }
 }
