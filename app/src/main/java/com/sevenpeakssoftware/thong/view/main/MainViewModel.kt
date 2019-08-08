@@ -2,7 +2,6 @@ package com.sevenpeakssoftware.thong.view.main
 
 import android.content.Context
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
@@ -24,7 +23,7 @@ import io.reactivex.subjects.PublishSubject
 
 class MainViewModel : BaseViewModel {
 
-    val itemSource = ObservableArrayList<ArticleCellViewModel>()
+    val bindItemSource = ObservableArrayList<ArticleCellViewModel>()
     val bindIsSwipe: ObservableField<Boolean> = ObservableField()
     val bindOnSwipeRefreshLayout: PublishSubject<SwipeRefreshLayout> = PublishSubject.create()
     val bindShowWarning = ObservableField<String>("")
@@ -39,40 +38,39 @@ class MainViewModel : BaseViewModel {
         mContext = context
 
         // These function have to put here to avoid load again when activity re-created ( Rotation )
-        _fetchArticles()
-        _subscribeOnRefresh()
+        fetchArticles()
+        subscribeOnRefresh()
     }
 
     /**
      * If you want fetch new data when rotate or re-created activity
      */
     override fun react() {
-//        _fetchArticles()
-//        _subscribeOnRefresh()
+
     }
 
-    private fun _subscribeOnRefresh() {
+    private fun subscribeOnRefresh() {
         getDisposable().add(
             bindOnSwipeRefreshLayout
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    _fetchArticles()
+                    fetchArticles()
                 }
         )
     }
 
-    private fun _fetchArticles() {
+    private fun fetchArticles() {
         bindIsSwipe.set(true)
         getDisposable().add(
             mMainService.getAllArticle()
                 .subscribeOn(Schedulers.io())
                 .takeWhile { it.content != null && it.content!!.isNotEmpty()}
-                .doOnNext { _saveArticles(it!!.content!!) }
+                .doOnNext { saveArticles(it!!.content!!) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
 
-                    itemSource.clear()
-                    itemSource.addAll(response.content!!.map(::ArticleCellViewModel))
+                    bindItemSource.clear()
+                    bindItemSource.addAll(response.content!!.map(::ArticleCellViewModel))
 
                     bindShowWarning.set("")
                     bindIsSwipe.set(false)
@@ -86,8 +84,8 @@ class MainViewModel : BaseViewModel {
                             Toast.LENGTH_LONG
                         ).show()
 
-                    if (itemSource.size == 0)
-                        _showOfflineArticles()
+                    if (bindItemSource.size == 0)
+                        showOfflineArticles()
 
                     bindIsSwipe.set(false)
 
@@ -97,7 +95,7 @@ class MainViewModel : BaseViewModel {
         )
     }
 
-    private fun _showOfflineArticles() {
+    private fun showOfflineArticles() {
         getDisposable().add(
             mDbHelper.getAllArticle()
                 .subscribeOn(Schedulers.io())
@@ -106,9 +104,9 @@ class MainViewModel : BaseViewModel {
                     if (offlineData.isEmpty())
                         bindShowWarning.set(mContext.getString(R.string.no_offline_data))
                     else
-                        itemSource.addAll(offlineData.map(::ArticleCellViewModel))
-                }, { _ ->
-                    if (itemSource.size == 0)
+                        bindItemSource.addAll(offlineData.map(::ArticleCellViewModel))
+                }, {
+                    if (bindItemSource.size == 0)
                         bindShowWarning.set(mContext.getString(R.string.failed_load_offline_data))
                 })
         )
@@ -117,7 +115,7 @@ class MainViewModel : BaseViewModel {
     /**
      * This function is run from background to avoid skipping frame.
      */
-    private fun _saveArticles(listArticleResponse: List<ArticleResponse>) {
+    private fun saveArticles(listArticleResponse: List<ArticleResponse>) {
         getDisposable().add(
             Observable.just(mDbHelper)
                 .subscribeOn(Schedulers.newThread())
@@ -158,10 +156,4 @@ class MainViewModel : BaseViewModel {
                 }, { })
         )
     }
-}
-
-class MainAdapter(source: ObservableArrayList<ArticleCellViewModel>) :
-    BaseRecycleViewAdapter<com.sevenpeakssoftware.thong.databinding.ItemArticleBinding, ArticleCellViewModel>(source) {
-
-    override fun getLayoutId(viewType: Int) = R.layout.item_article
 }

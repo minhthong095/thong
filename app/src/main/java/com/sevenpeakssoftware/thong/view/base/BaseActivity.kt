@@ -13,12 +13,9 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
 
     lateinit var viewBinding: T
 
-
     abstract fun getViewModel(): V
 
-
     abstract fun getBindingVariable(): Int
-
 
     abstract fun getLayoutId(): Int
 

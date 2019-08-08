@@ -1,11 +1,7 @@
 package com.sevenpeakssoftware.thong.view.base
 
-import android.content.Context
-import android.graphics.Point
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
@@ -13,47 +9,29 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.sevenpeakssoftware.thong.BR
-import com.sevenpeakssoftware.thong.utils.getSize
 import java.lang.ref.WeakReference
-import java.security.CodeSource
 
-abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
-    RecyclerView.Adapter<RecycleViewCell<CVM>> {
+abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel>: RecyclerView.Adapter<RecycleViewCell> {
 
-    private lateinit var itemSource: ObservableArrayList<CVM>
+    private val mItemSource: ObservableArrayList<CVM>
     private lateinit var mBinding: CB
 
-    private var mHeightCell = 0
-
     constructor(source: ObservableArrayList<CVM>) {
-        itemSource = source
-        itemSource.addOnListChangedCallback(ListChangedCallBack<CB, CVM>(this as BaseRecycleViewAdapter<ViewDataBinding, ViewModel>))
+        mItemSource = source
+        mItemSource.addOnListChangedCallback(WeakOnListChangedCallback(mObservableListCallback))
     }
 
     abstract fun getLayoutId(viewType: Int): Int
 
     open fun getItemType(position: Int) = 0
 
+    open fun getCell(binder: ViewDataBinding) = RecycleViewCell(binder)
 
-    /**
-     * This ratio correspond with screen height
-     *
-     * Function will work when its override and set new value larger than zero
-     * from inheritance class
-     */
-    open fun getRatioHeight(): Float = 0f
-
-
-    open fun getCell(binder: ViewDataBinding) = RecycleViewCell<CVM>(binder)
-
-
-    override fun getItemCount() = itemSource.count()
-
+    override fun getItemCount() = mItemSource.count()
 
     override fun getItemViewType(position: Int) = getItemType(position)
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecycleViewCell<CVM> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecycleViewCell {
 
         mBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
@@ -66,45 +44,93 @@ abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel> :
     }
 
 
-    override fun onBindViewHolder(holder: RecycleViewCell<CVM>, position: Int) {
-        val cvm = itemSource[position]
+    override fun onBindViewHolder(holder: RecycleViewCell, position: Int) {
+        val cvm = mItemSource[position]
 
         holder.binding.setVariable(BR.itemViewModel, cvm)
         holder.binding.executePendingBindings()
     }
 
-    class ListChangedCallBack<CB, CVM>(adapter: BaseRecycleViewAdapter<ViewDataBinding, ViewModel>) :
-        ObservableList.OnListChangedCallback<ObservableList<CVM>>() {
-
-        private val adapterReference = WeakReference(adapter)
-
-        override fun onChanged(sender: ObservableList<CVM>?) {
-            adapterReference.get()?.notifyDataSetChanged()
+    private val weakCallback: WeakReference<ObservableList.OnListChangedCallback<ObservableArrayList<CVM>>> = WeakReference(object : ObservableList.OnListChangedCallback<ObservableArrayList<CVM>>() {
+        override fun onChanged(sender: ObservableArrayList<CVM>?) {
+            notifyDataSetChanged()
         }
 
-        override fun onItemRangeChanged(sender: ObservableList<CVM>?, positionStart: Int, itemCount: Int) {
-            adapterReference.get()?.notifyItemRangeChanged(positionStart, itemCount)
-        }
-
-        override fun onItemRangeInserted(sender: ObservableList<CVM>?, positionStart: Int, itemCount: Int) {
-            adapterReference.get()?.notifyItemRangeInserted(positionStart, itemCount)
+        override fun onItemRangeRemoved(sender: ObservableArrayList<CVM>?, positionStart: Int, itemCount: Int) {
+            notifyItemRangeRemoved(positionStart, itemCount)
         }
 
         override fun onItemRangeMoved(
-            sender: ObservableList<CVM>?,
+            sender: ObservableArrayList<CVM>?,
             fromPosition: Int,
             toPosition: Int,
             itemCount: Int
         ) {
-            adapterReference.get()?.notifyItemMoved(fromPosition, toPosition)
+            notifyItemMoved(fromPosition, toPosition)
         }
 
-        override fun onItemRangeRemoved(sender: ObservableList<CVM>?, positionStart: Int, itemCount: Int) {
-            adapterReference.get()?.notifyItemRangeRemoved(positionStart, itemCount)
+        override fun onItemRangeInserted(sender: ObservableArrayList<CVM>?, positionStart: Int, itemCount: Int) {
+            notifyItemRangeInserted(positionStart, itemCount)
         }
 
+        override fun onItemRangeChanged(sender: ObservableArrayList<CVM>?, positionStart: Int, itemCount: Int) {
+            notifyItemRangeChanged(positionStart, itemCount)
+        }
+    })
+
+    private val mObservableListCallback = object : ObservableList.OnListChangedCallback<ObservableArrayList<CVM>>() {
+        override fun onChanged(sender: ObservableArrayList<CVM>?) {
+            notifyDataSetChanged()
+        }
+
+        override fun onItemRangeRemoved(sender: ObservableArrayList<CVM>?, positionStart: Int, itemCount: Int) {
+            notifyItemRangeRemoved(positionStart, itemCount)
+        }
+
+        override fun onItemRangeMoved(
+            sender: ObservableArrayList<CVM>?,
+            fromPosition: Int,
+            toPosition: Int,
+            itemCount: Int
+        ) {
+            notifyItemMoved(fromPosition, toPosition)
+        }
+
+        override fun onItemRangeInserted(sender: ObservableArrayList<CVM>?, positionStart: Int, itemCount: Int) {
+            notifyItemRangeInserted(positionStart, itemCount)
+        }
+
+        override fun onItemRangeChanged(sender: ObservableArrayList<CVM>?, positionStart: Int, itemCount: Int) {
+            notifyItemRangeChanged(positionStart, itemCount)
+        }
     }
 }
 
-class RecycleViewCell<CVM>(val binding: ViewDataBinding) :
+class RecycleViewCell(val binding: ViewDataBinding) :
     RecyclerView.ViewHolder(binding.root)
+
+private class WeakOnListChangedCallback<T : ObservableArrayList<*>>(callback: ObservableList.OnListChangedCallback<T>) :
+    ObservableList.OnListChangedCallback<T>() {
+
+    private val weakCallback: WeakReference<ObservableList.OnListChangedCallback<T>> = WeakReference(callback)
+
+    override fun onChanged(sender: T) {
+        weakCallback.get()?.onChanged(sender)
+    }
+
+    override fun onItemRangeChanged(sender: T, positionStart: Int, itemCount: Int) {
+        weakCallback.get()?.onItemRangeChanged(sender, positionStart, itemCount)
+    }
+
+    override fun onItemRangeInserted(sender: T, positionStart: Int, itemCount: Int) {
+        weakCallback.get()?.onItemRangeInserted(sender, positionStart, itemCount)
+    }
+
+    override fun onItemRangeMoved(sender: T, fromPosition: Int, toPosition: Int, itemCount: Int) {
+        weakCallback.get()?.onItemRangeMoved(sender, fromPosition, toPosition, itemCount)
+    }
+
+    override fun onItemRangeRemoved(sender: T, positionStart: Int, itemCount: Int) {
+        weakCallback.get()?.onItemRangeRemoved(sender, positionStart, itemCount)
+    }
+}
