@@ -13,12 +13,12 @@ import java.lang.ref.WeakReference
 
 abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel>: RecyclerView.Adapter<RecycleViewCell> {
 
-    private val mItemSource: ObservableArrayList<CVM>
-    private lateinit var mBinding: CB
+    private val _itemSource: ObservableArrayList<CVM>
+    private lateinit var _binding: CB
 
     constructor(source: ObservableArrayList<CVM>) {
-        mItemSource = source
-        mItemSource.addOnListChangedCallback(WeakOnListChangedCallback(mObservableListCallback))
+        _itemSource = source
+        _itemSource.addOnListChangedCallback(WeakOnListChangedCallback(mObservableListCallback))
     }
 
     abstract fun getLayoutId(viewType: Int): Int
@@ -27,25 +27,25 @@ abstract class BaseRecycleViewAdapter<CB : ViewDataBinding, CVM : ViewModel>: Re
 
     open fun getCell(binder: ViewDataBinding) = RecycleViewCell(binder)
 
-    override fun getItemCount() = mItemSource.count()
+    override fun getItemCount() = _itemSource.count()
 
     override fun getItemViewType(position: Int) = getItemType(position)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecycleViewCell {
 
-        mBinding = DataBindingUtil.inflate(
+        _binding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             getLayoutId(viewType),
             parent,
             false
         )
 
-        return getCell(mBinding)
+        return getCell(_binding)
     }
 
 
     override fun onBindViewHolder(holder: RecycleViewCell, position: Int) {
-        val cvm = mItemSource[position]
+        val cvm = _itemSource[position]
 
         holder.binding.setVariable(BR.itemViewModel, cvm)
         holder.binding.executePendingBindings()
@@ -85,25 +85,25 @@ class RecycleViewCell(val binding: ViewDataBinding) :
 private class WeakOnListChangedCallback<T : ObservableArrayList<*>>(callback: ObservableList.OnListChangedCallback<T>) :
     ObservableList.OnListChangedCallback<T>() {
 
-    private val weakCallback: WeakReference<ObservableList.OnListChangedCallback<T>> = WeakReference(callback)
+    private val _weakCallback: WeakReference<ObservableList.OnListChangedCallback<T>> = WeakReference(callback)
 
     override fun onChanged(sender: T) {
-        weakCallback.get()?.onChanged(sender)
+        _weakCallback.get()?.onChanged(sender)
     }
 
     override fun onItemRangeChanged(sender: T, positionStart: Int, itemCount: Int) {
-        weakCallback.get()?.onItemRangeChanged(sender, positionStart, itemCount)
+        _weakCallback.get()?.onItemRangeChanged(sender, positionStart, itemCount)
     }
 
     override fun onItemRangeInserted(sender: T, positionStart: Int, itemCount: Int) {
-        weakCallback.get()?.onItemRangeInserted(sender, positionStart, itemCount)
+        _weakCallback.get()?.onItemRangeInserted(sender, positionStart, itemCount)
     }
 
     override fun onItemRangeMoved(sender: T, fromPosition: Int, toPosition: Int, itemCount: Int) {
-        weakCallback.get()?.onItemRangeMoved(sender, fromPosition, toPosition, itemCount)
+        _weakCallback.get()?.onItemRangeMoved(sender, fromPosition, toPosition, itemCount)
     }
 
     override fun onItemRangeRemoved(sender: T, positionStart: Int, itemCount: Int) {
-        weakCallback.get()?.onItemRangeRemoved(sender, positionStart, itemCount)
+        _weakCallback.get()?.onItemRangeRemoved(sender, positionStart, itemCount)
     }
 }

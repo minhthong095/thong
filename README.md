@@ -1,5 +1,7 @@
 # Test Project - Car
 
+![](gif/android.gif)
+
 ## Features
 - Load data and show from API.
 - Save offline data in background service when ever fetch new data.
@@ -13,7 +15,15 @@ APK file and Database file are located at root project folder with following nam
 - com.sevenpeakssoftware.thong.db
 
 ## Architecture
-#### MVVM Design Pattern
+
+#### Libraries
+- RxJava 2
+- Android X
+- Dagger 2
+- Retrofit 2
+- Room Persistence Library
+- Glide
+
 #### Base Classes
 * `BaseActivity.kt`
 * `BaseViewModel.kt`
@@ -50,11 +60,3 @@ Created with purpose to remove redundant code and support common functions.
 #### Library Version
 
 All library version number write down in build.gradle ( Project )
-
-## Libraries
-- RxJava 2
-- Android X
-- Dagger 2
-- Retrofit 2
-- Room Persistence Library
-- Glide
