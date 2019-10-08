@@ -47,16 +47,17 @@ Created with purpose to remove redundant code and support common functions.
 
 - Table Article
 
+```
 | IdArticle      | Title  | DateTime  | Image  | Ingress  | Created  | Changed
 | -------------  | ------ |
 | Primary Key    | 
-
+```
 - Table Content
-
+```
 | IdContent*    | IdArticle   | Type  | Subject  | Description  | 
 | ------------- | ----------- |
 | Primary Key   | Foreign Key |
-
+```
 #### Library Version
 
 All library version number write down in build.gradle ( Project )
